@@ -161,7 +161,7 @@ function specialMethod(name, lang) {
 }
 
 function pageConfig(data) {
-  return data.match(/export\s(const|var|let)\sconfig\s=\s{[\s\S][^;]+/gm)[0]
+  return data.match(/export\s(const|var|let)\sconfig(.|\n)*?}\n{0,1}/m)[0]
 }
 
 function exportAllFromPage(prefix, page, lang) {
