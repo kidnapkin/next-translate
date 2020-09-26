@@ -160,6 +160,10 @@ function specialMethod(name, lang) {
   return `export const ${name} = ctx => _rest.${name}({ ...ctx, lang: '${lang}' })`
 }
 
+function pageConfig(data) {
+  return data.match(/export\s(const|var|let)\sconfig\s=\s{[\s\S][^;]+/gm)[0]
+}
+
 function exportAllFromPage(prefix, page, lang) {
   const clearCommentsRgx = /\/\*[\s\S]*?\*\/|\/\/.*/g
   const pageData = fs
@@ -180,7 +184,7 @@ ${isGetStaticProps ? specialMethod('getStaticProps', lang) : ''}
 ${isGetStaticPaths ? specialMethod('getStaticPaths', lang) : ''}
 ${isGetServerSideProps ? specialMethod('getServerSideProps', lang) : ''}
 ${isHead ? `export { Head } from '${prefix}/${clearPageExt(page)}'` : ''}
-${isConfig ? `export { config } from '${prefix}/${clearPageExt(page)}'` : ''}
+${isConfig ? pageConfig(pageData) : ''}
 `
 
   return { hasSomeSpecialMethod, exports }
